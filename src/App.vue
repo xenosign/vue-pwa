@@ -1,85 +1,112 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <div id="app-container">
+    <div id="app">
+      <header>
+        <h1>헤더 메뉴 예시</h1>
+      </header>
+      <main>
+        <router-view></router-view>
+      </main>
+      <footer>
+        <div class="footer-menu">
+          <button class="menu-item">
+            <Search class="icon" />
+            <span>검색</span>
+          </button>
+          <button class="menu-item">
+            <Home class="icon" />
+            <span>홈</span>
+          </button>
+          <button class="menu-item">
+            <User class="icon" />
+            <span>프로필</span>
+          </button>
+        </div>
+      </footer>
     </div>
-  </header>
-
-  <RouterView />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<script setup>
+import { ref, computed } from 'vue';
+import { Home, Search, User } from 'lucide-vue-next';
+</script>
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+#app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #f0f0f0;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
+#app {
+  font-family: Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  margin-top: 2rem;
+  color: #2c3e50;
+  background-color: white;
+  width: 100%;
+  max-width: 414px; /* iPhone 12 Pro Max width */
+  height: 100vh;
+  max-height: 896px; /* iPhone 12 Pro Max height */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+header {
+  background-color: #f8f8f8;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+h1 {
+  margin: 0;
+  font-size: 1.2rem;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+main {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
 }
 
-nav a:first-of-type {
-  border: 0;
+footer {
+  background-color: #f8f8f8;
+  padding: 0.5rem;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.footer-menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #2c3e50;
+  font-size: 0.7rem;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
 }
 </style>
