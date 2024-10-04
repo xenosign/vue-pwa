@@ -21,6 +21,7 @@ const requestNotificationPermission = async () => {
     });
     fcmToken.value = token;
     console.log('FCM 토큰:', token);
+    alert(token);
     // 여기서 토큰을 서버로 전송하거나 저장할 수 있습니다.
   } catch (error) {
     console.error('알림 권한을 얻는데 실패했습니다:', error);
