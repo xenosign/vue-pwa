@@ -9,17 +9,17 @@
       </main>
       <footer>
         <div class="footer-menu">
-          <button class="menu-item">
+          <button class="menu-item" @click="navigateTo('/search')">
             <Search class="icon" />
             <span>검색</span>
           </button>
-          <button class="menu-item">
+          <button class="menu-item" @click="navigateTo('/')">
             <Home class="icon" />
             <span>홈</span>
           </button>
-          <button class="menu-item">
+          <button class="menu-item" @click="navigateTo('/fire')">
             <User class="icon" />
-            <span>프로필</span>
+            <span>Firebase</span>
           </button>
         </div>
       </footer>
@@ -29,7 +29,14 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { Home, Search, User } from 'lucide-vue-next';
+
+const router = useRouter();
+
+const navigateTo = (path) => {
+  router.push(path);
+};
 </script>
 
 <style>

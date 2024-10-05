@@ -42,4 +42,17 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    headers: {
+      'Service-Worker-Allowed': '/',
+    },
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        app: './index.html',
+        'firebase-messaging-sw': './public/firebase-messaging-sw.js',
+      },
+    },
+  },
 });
