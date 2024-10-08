@@ -9,6 +9,7 @@
           <feDropShadow dx="0" dy="0" stdDeviation="3" flood-opacity="0.3" />
         </filter>
       </defs>
+      <!-- 차트 영역 -->
       <g :transform="`translate(${centerX},${centerY})`" filter="url(#shadow)">
         <g transform="rotate(-90)">
           <path
@@ -57,10 +58,10 @@
         {{ totalFormatted }}
       </text>
 
-      <!-- Legend -->
+      <!-- 항목 영역 -->
       <g
         :transform="`translate(${width * 0.7}, ${
-          height / 2 - (chartData.length * 25) / 2
+          height / 2 - (chartData.length * 25) / 2 - 10
         })`"
       >
         <g
@@ -82,6 +83,7 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
 
+// 차트 그리는 공간의 넓이값
 const props = defineProps({
   data: {
     type: Array,
@@ -97,21 +99,24 @@ const props = defineProps({
   },
 });
 
+// 차트의 색상 -> 순서대로 적용 됩니다!
 const COLORS = [
   '#9A40D6',
   '#0066FF',
   '#4d94ff',
   '#99c2ff',
-  '#c28ce6',
   '#ffc6f3',
+  '#e0bff2',
   '#c28ce6',
 ];
 
 const animationProgress = ref(0);
+// 차트 기본 두께 설정, 0.2 곱하기 값을 변경하면 기본 두께가 변경 됩니다
 const innerRadius = computed(() => Math.min(props.width, props.height) * 0.2);
 const normalThickness = computed(
   () => Math.min(props.width, props.height) * 0.15
 );
+// 제일 가격이 큰 차트의 두께를 조절 합니다. 1.05 파트를 수정 하면 됩니다!
 const emphasizedThickness = computed(() => normalThickness.value * 1.05);
 const centerX = computed(() => props.width * 0.33);
 const centerY = computed(() => props.height / 2);

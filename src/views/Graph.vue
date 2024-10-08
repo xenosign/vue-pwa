@@ -9,6 +9,7 @@
 import DonutChart from '@/components/DonutChart.vue';
 import { ref } from 'vue';
 
+// 차트 데이터를 아래와 같이 전달하면 됩니다! 보유량이 큰 순서대로 보내시면 됩니다!
 const stockData = ref([
   { name: '삼성전자', value: 3000000 },
   { name: 'SK', value: 2000000 },
