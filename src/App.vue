@@ -11,7 +11,7 @@
         <div class="footer-menu">
           <button class="menu-item" @click="navigateTo('/search')">
             <Search class="icon" />
-            <span>검색</span>
+            <span>그래프</span>
           </button>
           <button class="menu-item" @click="navigateTo('/')">
             <Home class="icon" />
