@@ -1,12 +1,23 @@
 import './assets/main.css';
-
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-
 import App from './App.vue';
 import router from './router';
 import { app as firebaseApp } from './firebase';
-import { getMessaging, getToken } from 'firebase/messaging';
+
+// 알림 권한 요청 함수
+function requestNotificationPermission() {
+  if ('Notification' in window) {
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log('알림 권한이 허용되었습니다.');
+        // Firebase 메시징 초기화 등의 추가 로직
+      } else {
+        console.log('알림 권한이 거부되었습니다.');
+      }
+    });
+  }
+}
 
 const app = createApp(App);
 
@@ -14,36 +25,12 @@ app.use(createPinia());
 app.use(router);
 app.config.globalProperties.$firebase = firebaseApp;
 
-// Firebase Messaging 초기화
-const messaging = getMessaging(firebaseApp);
-
-// 서비스 워커 등록
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .register('/firebase-messaging-sw.js')
-    .then(function (registration) {
-      console.log('Service Worker registered with scope:', registration.scope);
-    })
-    .catch(function (error) {
-      console.log('Service Worker registration failed:', error);
-    });
-}
-
-// FCM 토큰 가져오기
-getToken(messaging, {
-  vapidKey:
-    'BODvgdE8wFmxqqLtqPlCLv9oHLuJvA4bLnQKz-r00QZwB93YLKGWCTi59iPpJt4LGPU_tgHkInUITG6OOTlqB7E',
-})
-  .then((currentToken) => {
-    if (currentToken) {
-      // 토큰을 서버로 전송하거나 필요한 곳에 저장
-      console.log('FCM 토큰:', currentToken);
-    } else {
-      console.log('토큰을 가져올 수 없습니다.');
-    }
-  })
-  .catch((err) => {
-    console.log('토큰 가져오기 오류:', err);
-  });
-
+// 앱 마운트 후 알림 권한 요청
 app.mount('#app');
+
+// Vue 인스턴스가 마운트된 후 실행
+requestNotificationPermission();
+
+// 전역 메서드로 등록 (필요시 컴포넌트에서 호출 가능)
+app.config.globalProperties.$requestNotificationPermission =
+  requestNotificationPermission;
