@@ -11,7 +11,7 @@
         <div class="footer-menu">
           <button class="menu-item" @click="navigateTo('/search')">
             <Search class="icon" />
-            <span>차트</span>
+            <span>그래프</span>
           </button>
           <button class="menu-item" @click="navigateTo('/')">
             <Home class="icon" />
@@ -19,7 +19,7 @@
           </button>
           <button class="menu-item" @click="navigateTo('/fire')">
             <User class="icon" />
-            <span>메세지</span>
+            <span>Firebase</span>
           </button>
         </div>
       </footer>
