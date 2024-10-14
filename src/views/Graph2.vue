@@ -1,96 +1,102 @@
+<!-- PropertyChart.vue -->
 <template>
   <div class="chart-container">
-    <svg :width="width" :height="height" viewBox="0 0 140 140">
-      <defs>
-        <radialGradient
-          id="skyBlueGradient"
-          cx="50%"
-          cy="50%"
-          r="50%"
-          fx="50%"
-          fy="50%"
-        >
-          <stop
-            offset="0%"
-            style="stop-color: rgb(235, 245, 255); stop-opacity: 1"
+    <div class="chart-box">
+      <svg :width="width" :height="height" viewBox="0 0 140 150">
+        <defs>
+          <radialGradient
+            id="skyBlueGradient"
+            cx="50%"
+            cy="50%"
+            r="50%"
+            fx="50%"
+            fy="50%"
+          >
+            <stop offset="0%" stop-color="#C1DAFF" stop-opacity="0.3" />
+            <stop offset="30%" stop-color="var(--p60)" stop-opacity="0.7" />
+            <stop offset="70%" stop-color="var(--p30)" stop-opacity="0.7" />
+            <stop offset="80%" stop-color="var(--p20)" stop-opacity="0.5" />
+            <stop offset="100%" stop-color="var(--p10)" stop-opacity="0.5" />
+          </radialGradient>
+          <mask id="previousLevelMask">
+            <g v-for="(section, index) in previousSections" :key="index">
+              <path
+                v-for="(level, levelIndex) in 6"
+                :key="`${index}-${levelIndex}`"
+                :d="calculatePath(index, levelIndex, 1.02)"
+                :fill="levelIndex < section.level ? 'white' : 'black'"
+              />
+            </g>
+          </mask>
+          <mask id="currentLevelMask">
+            <g v-for="(section, index) in sections" :key="index">
+              <path
+                v-for="(level, levelIndex) in 6"
+                :key="`${index}-${levelIndex}`"
+                :d="calculatePath(index, levelIndex, 1.02)"
+                :fill="levelIndex < section.level ? 'white' : 'black'"
+              />
+            </g>
+          </mask>
+        </defs>
+        <g v-for="levelIndex in 6" :key="`grid-${levelIndex}`">
+          <circle
+            cx="70"
+            cy="70"
+            :r="levelIndex * 10"
+            fill="none"
+            :stroke="levelIndex === maxLevel ? 'var(--gr50)' : 'var(--gr60)'"
+            stroke-width="0.5"
+            stroke-dasharray="1,1"
+            class="animated-circle"
           />
-          <stop
-            offset="20%"
-            style="stop-color: rgb(208, 235, 255); stop-opacity: 1"
+        </g>
+        <g v-for="(section, index) in sections" :key="`lines-${index}`">
+          <path
+            :d="calculateLinePath(index)"
+            fill="none"
+            stroke="var(--gr60)"
+            stroke-width="0.5"
+            stroke-dasharray="1,1"
+            class="animated-line"
           />
-          <stop
-            offset="40%"
-            style="stop-color: rgb(181, 225, 255); stop-opacity: 1"
-          />
-          <stop
-            offset="60%"
-            style="stop-color: rgb(154, 215, 255); stop-opacity: 1"
-          />
-          <stop
-            offset="80%"
-            style="stop-color: rgb(127, 205, 255); stop-opacity: 1"
-          />
-          <stop
-            offset="100%"
-            style="stop-color: rgb(100, 195, 255); stop-opacity: 1"
-          />
-        </radialGradient>
-        <mask id="levelMask">
-          <g v-for="(section, index) in sections" :key="index">
-            <path
-              v-for="(level, levelIndex) in 5"
-              :key="`${index}-${levelIndex}`"
-              :d="calculatePath(index, levelIndex)"
-              :fill="levelIndex < section.level ? 'white' : 'black'"
-            />
-          </g>
-        </mask>
-      </defs>
-      <circle cx="70" cy="70" r="50" fill="#ffffff" />
-      <circle
-        cx="70"
-        cy="70"
-        r="50"
-        fill="url(#skyBlueGradient)"
-        mask="url(#levelMask)"
-      />
-      <g v-for="(section, index) in sections" :key="`lines-${index}`">
-        <path
-          v-for="levelIndex in 5"
-          :key="`line-${index}-${levelIndex}`"
-          :d="calculateLinePath(index, levelIndex)"
-          fill="none"
-          stroke-width="0.5"
-          stroke-dasharray="1,1"
+        </g>
+        <circle
+          cx="70"
+          cy="70"
+          r="60"
+          fill="var(--gr60)"
+          fill-opacity="0.3"
+          mask="url(#previousLevelMask)"
+          class="animated-fill previous"
         />
-      </g>
-      <circle
-        cx="70"
-        cy="70"
-        r="50"
-        fill="none"
-        stroke="#cccccc"
-        stroke-width="0.5"
-        stroke-dasharray="1,1"
-      />
-      <g v-for="(label, index) in labels" :key="`label-${index}`">
-        <text
-          :x="calculateLabelPosition(index).x"
-          :y="calculateLabelPosition(index).y"
-          text-anchor="middle"
-          font-size="6"
-          fill="#333333"
-        >
-          {{ label }}
-        </text>
-      </g>
-    </svg>
+        <circle
+          cx="70"
+          cy="70"
+          r="60"
+          fill="url(#skyBlueGradient)"
+          mask="url(#currentLevelMask)"
+          class="animated-fill current"
+        />
+        <g v-for="(label, index) in labels" :key="`label-${index}`">
+          <text
+            :x="calculateLabelPosition(index).x"
+            :y="calculateLabelPosition(index).y"
+            text-anchor="middle"
+            font-size="8"
+            :fill="
+              sections[index].level === maxLevel ? '#000000' : 'var(--gr50)'
+            "
+            font-weight="bold"
+          >
+            {{ label }}
+          </text>
+        </g>
+      </svg>
+    </div>
   </div>
 </template>
-
 <script>
-import { computed } from 'vue';
-
 export default {
   props: {
     width: {
@@ -101,36 +107,46 @@ export default {
       type: Number,
       default: 250,
     },
-    levels: {
-      type: Array,
-      default: () => [1, 2, 3, 4, 5],
-      validator: (value) =>
-        value.length === 5 && value.every((v) => v >= 0 && v <= 5),
+    chartData: {
+      type: Object,
+      required: true,
     },
   },
-  setup(props) {
-    const sections = computed(() => {
-      return props.levels.map((level) => ({ level }));
-    });
-
-    const labels = ['현금자산', '예적금', '주식', '펀드', '채권'];
-
-    const calculatePath = (sectionIndex, levelIndex) => {
+  data() {
+    return {
+      labels: ['예적금', '주식', '펀드', '채권', '현금자산'],
+    };
+  },
+  computed: {
+    levels() {
+      return [1, 2, 3, 4, 5];
+    },
+    previousLevels() {
+      return [2, 3, 4, 5, 1];
+    },
+    sections() {
+      return this.levels.map((level) => ({ level }));
+    },
+    previousSections() {
+      return this.previousLevels.map((level) => ({ level }));
+    },
+    maxLevel() {
+      return Math.max(...this.levels);
+    },
+  },
+  methods: {
+    calculatePath(sectionIndex, levelIndex, scale = 1) {
       const startAngle = sectionIndex * (360 / 5);
       const endAngle = (sectionIndex + 1) * (360 / 5);
-      const innerRadius = levelIndex * 10;
-      const outerRadius = (levelIndex + 1) * 10;
-
+      const innerRadius = levelIndex * 10 * scale;
+      const outerRadius = (levelIndex + 1) * 10 * scale;
       const startRadians = (startAngle - 90) * (Math.PI / 180);
       const endRadians = (endAngle - 90) * (Math.PI / 180);
-
       const startX = 70 + innerRadius * Math.cos(startRadians);
       const startY = 70 + innerRadius * Math.sin(startRadians);
       const endX = 70 + outerRadius * Math.cos(endRadians);
       const endY = 70 + outerRadius * Math.sin(endRadians);
-
       const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
-
       return `
         M ${startX} ${startY}
         A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 1 ${
@@ -142,41 +158,103 @@ export default {
       } ${70 + outerRadius * Math.sin(startRadians)}
         Z
       `;
-    };
-
-    const calculateLinePath = (sectionIndex, levelIndex) => {
+    },
+    calculateLinePath(sectionIndex) {
       const angle = sectionIndex * (360 / 5) - 90;
-      const radius = levelIndex * 10;
+      const radius = 60;
       const radians = angle * (Math.PI / 180);
       const x = 70 + radius * Math.cos(radians);
       const y = 70 + radius * Math.sin(radians);
       return `M 70 70 L ${x} ${y}`;
-    };
-
-    const calculateLabelPosition = (index) => {
-      const angle = (index * 72 + -60) * (Math.PI / 180);
-      const radius = 65;
+    },
+    calculateLabelPosition(index) {
+      let angle = (index * 72 - 54) * (Math.PI / 180);
+      let radius = 76;
       return {
         x: 70 + radius * Math.cos(angle),
         y: 70 + radius * Math.sin(angle),
       };
-    };
-
-    return {
-      sections,
-      labels,
-      calculatePath,
-      calculateLinePath,
-      calculateLabelPosition,
-    };
+    },
+  },
+  watch: {
+    chartData: {
+      handler() {
+        this.$nextTick(() => {
+          const elements = this.$el.querySelectorAll(
+            '.animated-circle, .animated-line, .animated-fill'
+          );
+          elements.forEach((el) => {
+            el.style.animation = 'none';
+            el.offsetHeight; // trigger reflow
+            el.style.animation = null;
+          });
+        });
+      },
+      deep: true,
+    },
   },
 };
 </script>
-
 <style scoped>
 .chart-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.chart-box {
+  width: 335px;
+  height: 320px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  border: 1px solid var(--gr70);
+  background: var(--gr100);
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.04);
   display: flex;
   justify-content: center;
   align-items: center;
+}
+@keyframes drawCircle {
+  0% {
+    stroke-dasharray: 0, 377;
+    stroke-dashoffset: 377;
+  }
+  100% {
+    stroke-dasharray: 1, 1;
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawLine {
+  0% {
+    stroke-dasharray: 0, 100;
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dasharray: 1, 1;
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fillIn {
+  0% {
+    transform: scale(0) rotate(0deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+.animated-circle {
+  animation: drawCircle 1.5s ease-out forwards;
+}
+.animated-line {
+  animation: drawLine 1.5s ease-out forwards;
+}
+.animated-fill {
+  transform-origin: center;
+  animation: fillIn 1.5s ease-out forwards;
+}
+.animated-fill.previous {
+  animation-delay: 0.5s;
+}
+.animated-fill.current {
+  animation-delay: 0.7s;
 }
 </style>

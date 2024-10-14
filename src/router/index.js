@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import FirebasePush from '../views/FirebasePush.vue';
 import Chart from '../views/Chart.vue';
+import Graph2 from '@/views/Graph2.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +20,7 @@ const router = createRouter({
     {
       path: '/search',
       name: 'chart',
-      component: Chart,
+      component: Graph2,
     },
   ],
 });
