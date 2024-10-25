@@ -104,9 +104,8 @@ onMounted(() => {
 watch(
   () => props.chartData,
   () => {
-    console.log('@@@', lineChart.value);
-
     if (lineChart.value) {
+      console.log('🚀 ~ lineChart:', lineChart);
       initializeChart();
     }
   },
