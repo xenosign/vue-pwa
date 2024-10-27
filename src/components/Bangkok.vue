@@ -56,24 +56,26 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-const headerImage = ref('/api/placeholder/800/400');
-const weather = ref(null);
+// 실제 방콕 도시 전경 이미지
+const headerImage = ref(
+  'https://images.unsplash.com/photo-1583491470869-ca0e85bd8a5d'
+);
 
 const attractions = ref([
   {
     name: '왕궁 (Grand Palace)',
     description: '태국 왕실의 공식 거주지였던 화려한 건축물',
-    image: '/api/placeholder/300/200',
+    image: 'https://images.unsplash.com/photo-1590579491624-f98f36d4c763',
   },
   {
     name: '왓 프라깨우 (Wat Phra Kaew)',
     description: '에메랄드 불상이 있는 태국에서 가장 신성한 사원',
-    image: '/api/placeholder/300/200',
+    image: 'https://images.unsplash.com/photo-1590579629391-5380a5d730ef',
   },
   {
     name: '차오프라야 강',
     description: '방콕을 가로지르는 생명의 강',
-    image: '/api/placeholder/300/200',
+    image: 'https://images.unsplash.com/photo-1617170788899-c6f3d0d9e2a7',
   },
 ]);
 
@@ -94,7 +96,7 @@ onMounted(() => {
 }
 
 .header-image {
-  height: 200px;
+  height: 400px; /* 높이를 증가시켜 더 큰 이미지 표시 */
   background-size: cover;
   background-position: center;
   position: relative;
@@ -107,78 +109,101 @@ onMounted(() => {
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   margin: 0;
-  font-size: 2rem;
+  font-size: 2.5rem; /* 글자 크기 증가 */
 }
 
 .content-section {
-  padding: 16px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .info-card {
   background: white;
   border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .quick-facts {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .fact {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
+  padding: 12px 0;
   border-bottom: 1px solid #eee;
 }
 
 .attraction-item {
   background: white;
   border-radius: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.attraction-item:hover {
+  transform: translateY(-4px);
 }
 
 .attraction-item img {
   width: 100%;
-  height: 200px;
+  height: 300px; /* 이미지 높이 증가 */
   object-fit: cover;
 }
 
 .attraction-info {
-  padding: 16px;
+  padding: 24px;
 }
 
 .attraction-info h3 {
-  margin: 0 0 8px 0;
+  margin: 0 0 12px 0;
   color: #333;
+  font-size: 1.3rem;
 }
 
 .weather-section {
   background: white;
   border-radius: 12px;
-  padding: 16px;
-  margin-top: 20px;
+  padding: 24px;
+  margin-top: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .temperature {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin: 0;
   color: #333;
 }
 
 .humidity {
   color: #666;
-  margin: 8px 0 0 0;
+  margin: 12px 0 0 0;
+  font-size: 1.1rem;
 }
 
 h2 {
   color: #333;
-  margin: 0 0 16px 0;
-  font-size: 1.5rem;
+  margin: 0 0 20px 0;
+  font-size: 1.8rem;
+}
+
+@media (min-width: 768px) {
+  .attractions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .attraction-item {
+    margin-bottom: 0;
+  }
 }
 </style>
