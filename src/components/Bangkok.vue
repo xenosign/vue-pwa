@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="bangkok-container">
     <div
       class="header-image"
@@ -206,4 +206,4 @@ h2 {
     margin-bottom: 0;
   }
 }
-</style>
+</style> -->
