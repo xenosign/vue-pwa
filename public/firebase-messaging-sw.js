@@ -6,13 +6,13 @@ importScripts(
 );
 
 firebase.initializeApp({
-  apiKey: 'AIzaSyAmyFp_KmwuOIIF1t4-gjvrmQBp_73jXZQ',
-  authDomain: 'kb-test-edbf4.firebaseapp.com',
-  projectId: 'kb-test-edbf4',
-  storageBucket: 'kb-test-edbf4.appspot.com',
-  messagingSenderId: '1009919369072',
-  appId: '1:1009919369072:web:2633c879e91dcaa94c39b5',
-  measurementId: 'G-T9JGRY6ESM',
+  apiKey: 'AIzaSyAzKCw7qaeWjdMsHikXV4mMnJ1aPQwchQI',
+  authDomain: 'alarm-46c15.firebaseapp.com',
+  projectId: 'alarm-46c15',
+  storageBucket: 'alarm-46c15.firebasestorage.app',
+  messagingSenderId: '224239831826',
+  appId: '1:224239831826:web:2c73650514d062787001cb',
+  measurementId: 'G-B05TZS38KE',
 });
 
 const messaging = firebase.messaging();
